@@ -47,8 +47,8 @@ ActiveRecord::Schema.define(version: 2020_05_22_023449) do
   end
 
   create_table "recipe_tags", force: :cascade do |t|
-    t.string "recipe_id"
-    t.string "tag_id"
+    t.integer "recipe_id"
+    t.integer "tag_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
