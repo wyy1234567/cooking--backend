@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     end
     
     def login
-        user = User.find(params[:id])
+        user = User.find_by(name: user_params[:name])
         render json: user, except: [:created_at, :updated_at]
     end
 

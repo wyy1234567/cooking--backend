@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get "/recipes/:id", to: "recipes#show"
   get '/tag/:tag_id/recipes', to: 'recipes#tag_recipes'
 
-  get 'users/login/:id', to: "users#login"
+  get 'users/login', to: "users#login"
   post 'users/register', to: "users#register"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -37,12 +37,19 @@ class Recipe < ApplicationRecord
     def full_recipe_info(recipe_id)
         recipe={}
         recipe = {:recipe => self}
-        recipe.merge!({:ingredients => self.ingredients})
+        # recipe.merge!({:ingredients => self.ingredients})
         recipe.merge!({:likes => self.likes})
         recipe.merge!({:comments => self.comments})
         recipe.merge!({:tags => self.tags})
-        recipe.merge!({:measurements => self.recipe_ingredients})
+        recipe.merge!({:ingredients => self.measurements})
     end
+
+    def measurements
+        self.recipe_ingredients.map do |ri|
+            {ingredient: ri.ingredient, quantity_number: ri.quantity_number, measurement: ri.measurement, instruction: ri.instruction}
+        end
+    end
+
 
 end
 
