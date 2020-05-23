@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
-  resources :recipe_tags
+  # resources :recipe_tags
   resources :tags
-  resources :recipe_ingredients
+  # resources :recipe_ingredients
   resources :ingredients
   resources :likes
   resources :comments
   resources :users
-  resources :recipes
+  # resources :recipes
+  
+  get "/:user_id/recipes", to: "recipes#show_user_recipes"
+  get "/:user_id/following_recipes", to: "recipes#following_recipes"
+  get "/recipes/:id", to: "recipes#show"
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
