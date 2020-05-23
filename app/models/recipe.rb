@@ -49,7 +49,5 @@ class Recipe < ApplicationRecord
             {ingredient: ri.ingredient, quantity_number: ri.quantity_number, measurement: ri.measurement, instruction: ri.instruction}
         end
     end
-
-
 end
 
