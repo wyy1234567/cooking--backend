@@ -28,7 +28,21 @@ class Recipe < ApplicationRecord
         end
         recipes
     end
+    
+    def self.tag_recipes(tag_id)
+        tag = Tag.find(tag_id)
+        tag.recipes
+    end
 
-    #TODO: create a funciton to add like/comment/tag/ingredients to current recipe, make it as an array
+    def full_recipe_info(recipe_id)
+        recipe={}
+        recipe = {:recipe => self}
+        recipe.merge!({:ingredients => self.ingredients})
+        recipe.merge!({:likes => self.likes})
+        recipe.merge!({:comments => self.comments})
+        recipe.merge!({:tags => self.tags})
+        recipe.merge!({:measurements => self.recipe_ingredients})
+    end
+
 end
 
