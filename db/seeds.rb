@@ -17,6 +17,7 @@ Comment.destroy_all
 Tag.destroy_all
 RecipeIngredient.destroy_all
 RecipeTag.destroy_all
+Follow.destroy_all
 
 # api_key = ENV['API_KEY']
 # base_search = ['chicken', 'burger', 'beef', 'breakfast', 'dinner', 'corn']
@@ -35,6 +36,14 @@ RecipeTag.destroy_all
 # end
 
 user1 =  User.create(name: 'wyy', password_digest: '123')
+user2 = User.create(name: 'Gordon Ramsay', password_digest: '123')
+user3 = User.create(name: 'Thomas Keller', password_digest: '123')
+user4 = User.create(name: 'lucky', password_digest: '123')
+
+follow1 = Follow.create(user_id: user1.id, following_id: user2.id)
+follow2 = Follow.create(user_id: user1.id, following_id: user3.id)
+follow3 = Follow.create(user_id: user1.id, following_id: user4.id)
+follow4 = Follow.create(user_id: user4.id, following_id: user1.id)
 
 recipe1 = Recipe.create(title: "Hawaiian Pork Burger", 
     image: "https://spoonacular.com/recipeImages/245166-556x370.jpg", 
