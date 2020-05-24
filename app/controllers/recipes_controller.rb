@@ -51,13 +51,34 @@ class RecipesController < ApplicationController
     end
     
     def create
-        recipe = Recipe.create(recipe_params)
+        puts "CREATE RECIPE"
+        puts recipe_params
+
+        recipe = Recipe.new(recipe_params)
+        recipe.user = current_user
+
+        if recipe.save then
+            puts "valid recipe"
+        else
+            puts "INVALID RECIPE"
+        end
         render json: recipe, except: [:created_at, :updated_at]
     end
 
     def update
         recipe = Recipe.find(params[:id])
+
+        puts "UPDATE RECIPE"
+        puts recipe_params
+
         recipe.update(recipe_params)
+
+        if recipe.valid? then
+            puts "valid recipe"
+        else
+            puts "INVALID RECIPE"
+        end
+
         render json: recipe, except: [:created_at, :updated_at]
     end
 
