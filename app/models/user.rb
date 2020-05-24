@@ -12,4 +12,6 @@ class User < ApplicationRecord
     has_many :followings, through: :following_relationships, source: :following
 
     has_secure_password
+
+    validates :name, uniqueness: { case_sensitive: false }
 end

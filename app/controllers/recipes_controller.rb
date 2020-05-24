@@ -11,7 +11,14 @@ class RecipesController < ApplicationController
 
     #render recipes list of a user, given user id, route: /:user_id/recipes
     def show_user_recipes
-        recipes = Recipe.find_user_recipes(params[:user_id].to_i)
+        # recipes = Recipe.find_user_recipes(params[:user_id].to_i)
+        recipes = nil
+        if current_user then
+            puts "we have a user"
+            recipes = current_user.recipes
+        else
+            recipes = Recipe.all
+        end
         render json: recipes, except: [:created_at, :updated_at]
     end
     
@@ -30,7 +37,9 @@ class RecipesController < ApplicationController
     #show details about this recipe, along with its ingredients, likes, comments, tags
     def show
         recipe = Recipe.find(params[:id])
+        puts "We have a recipe match"
         details = recipe.full_recipe_info(params[:id].to_i)
+        puts details
         render json: details, except: [:created_at, :updated_at]
     end
 
@@ -52,6 +61,6 @@ class RecipesController < ApplicationController
 
     private 
     def recipe_params
-        params.require(:recipe).permit(:title, :image, :description, :steps, :user_id, :isPublic)
+        params.require(:recipe).permit(:title, :image, :description, :steps, :isPublic)
     end
 end

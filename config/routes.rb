@@ -8,12 +8,13 @@ Rails.application.routes.draw do
   # resources :users
   # resources :recipes
   
-  get "/:user_id/recipes", to: "recipes#show_user_recipes"
-  get "/:user_id/following_recipes", to: "recipes#following_recipes"
+  get "/recipes", to: "recipes#show_user_recipes"
+  get "/recipes/following_recipes", to: "recipes#following_recipes"
+  get '/recipes/by_tag/:tag_id', to: 'recipes#tag_recipes'
   get "/recipes/:id", to: "recipes#show"
-  get '/tag/:tag_id/recipes', to: 'recipes#tag_recipes'
 
-  get 'users/login', to: "users#login"
-  post 'users/register', to: "users#register"
+  post '/users/login', to: "users#login"
+  post '/users/register', to: "users#register"
+  post '/users/logout', to: "users#logout"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
