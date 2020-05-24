@@ -12,12 +12,13 @@ class RecipesController < ApplicationController
     #render recipes list of a user, given user id, route: /:user_id/recipes
     def show_user_recipes
         # recipes = Recipe.find_user_recipes(params[:user_id].to_i)
-        recipes = nil
+        recipes = []
         if current_user then
             puts "we have a user"
             recipes = current_user.recipes
         else
-            recipes = Recipe.all
+            puts "No current user"
+            # recipes = Recipe.all
         end
         render json: recipes, except: [:created_at, :updated_at]
     end
