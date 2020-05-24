@@ -7,14 +7,15 @@ class Recipe < ApplicationRecord
     has_many :ingredients, through: :recipe_ingredients
     belongs_to :user
 
-    def self.find_user_recipes(user_id)
+    def self.find_user_recipes(user_name)
+        user = User.find_by(name: user_name)
         Recipe.all.select do |recipe|
-            recipe.user_id == user_id
+            recipe.user_id == user.id
         end
     end
 
-    def self.find_following_recipes(user_id)
-        user = User.find(user_id)
+    def self.find_following_recipes(user_name)
+        user = User.find_by(name: user_name)
         following_ids = user.followings.map do |following|
             following.id 
         end
@@ -29,8 +30,8 @@ class Recipe < ApplicationRecord
         recipes
     end
     
-    def self.tag_recipes(tag_id)
-        tag = Tag.find(tag_id)
+    def self.tag_recipes(tag_name)
+        tag = Tag.find_by(name: tag_name)
         tag.recipes
     end
 
@@ -49,5 +50,13 @@ class Recipe < ApplicationRecord
             {ingredient: ri.ingredient, quantity_number: ri.quantity_number, measurement: ri.measurement, instruction: ri.instruction}
         end
     end
+
+
+    def self.search_recipes(query)
+        Recipe.all.select do |recipe|
+            recipe.title.downcase.include?(query.downcase)
+        end
+    end
+
 end
 

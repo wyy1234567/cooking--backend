@@ -6,7 +6,7 @@
 
 - class method in Recipe model to *convert* an API JSON record into a Ruby Recipe object
 
-- add "Api_Id" field to the Recipe schema
+- add "Api_Id" field to the Recipe schema √
     - integer
     - null for recipes not from the API
 

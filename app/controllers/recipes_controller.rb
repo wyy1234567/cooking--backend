@@ -11,19 +11,19 @@ class RecipesController < ApplicationController
 
     #render recipes list of a user, given user id, route: /:user_id/recipes
     def show_user_recipes
-        recipes = Recipe.find_user_recipes(params[:user_id].to_i)
+        recipes = Recipe.find_user_recipes(params[:user_name])
         render json: recipes, except: [:created_at, :updated_at]
     end
     
     #render recipes that are posted by user's followings, given user_id, route: /:user_id/following_recipes 
     def following_recipes
-        recipes = Recipe.find_following_recipes(params[:user_id].to_i)
+        recipes = Recipe.find_following_recipes(params[:user_name])
         render json: recipes, except: [:created_at, :updated_at]
     end
     
     #recipe list of given tag name, given tag_id, route: /tag/:tag_id/recipes
     def tag_recipes 
-        recipes = Recipe.tag_recipes(params[:tag_id].to_i)
+        recipes = Recipe.tag_recipes(params[:tag_name])
         render json: recipes, except: [:created_at, :updated_at]
     end
     
@@ -33,7 +33,13 @@ class RecipesController < ApplicationController
         details = recipe.full_recipe_info(params[:id].to_i)
         render json: details, except: [:created_at, :updated_at]
     end
-
+    
+    #given a recipe title, seach for recipes that match the query 
+    def search 
+        recipes = Recipe.search_recipes(params[:query])
+        render json: recipes, except: [:created_at, :updated_at]
+    end
+    
     def create
         recipe = Recipe.create(recipe_params)
         render json: recipe, except: [:created_at, :updated_at]
@@ -49,6 +55,7 @@ class RecipesController < ApplicationController
         recipe = Recipe.find(params[:id])
         recipe.destroy
     end
+
 
     private 
     def recipe_params
