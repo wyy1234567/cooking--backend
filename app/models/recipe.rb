@@ -58,5 +58,42 @@ class Recipe < ApplicationRecord
         end
     end
 
-end
+    #create a Recipe object based on a given API search result
+    #result is an array of objects, iterate over it, and create recipe for each element
+    def self.convert(recipe_obj, user_id)
+        recipe_title = recipe_obj['title']
+        image_url = `https://spoonacular.com/recipeImages/#{recipe_title.parameterize}-#{recipe_obj['id']}.jpg`
+        Recipe.create(title: recipe_title, image: image_url, user_id: user_id, isPublic: true, api_id: recipe_obj['id'])
+    end
 
+    #add steps, descriptions to recipe, also create recipe_ingredient and recipe_tag
+    def self.relation_recipe(recipe_id, api_response)
+        recipe = Recipe.find(recipe_id)
+        recipe.steps = api_response['instructions']
+        recipe.description = api_response['summary']
+        ingredients_arr = api_response['extendedIngredients']
+
+        ingredients_arr.each do |ingredient|
+            ing = Ingredient.find_by(name: ingredient['name'])
+            if ing #if ingredient exist, create join table for with this recipe and existing ingredient
+                RecipeIngredient.create(recipe: recipe, ingredient: ing, quantity_number: ingredient['measures']['us']['amount'].to_f, measurement: ingredient['measures']['us']['unitLong'], instruction: ingredient['originalString'])
+            else #if ingredinet is new, create new ingredient first, then relate new ingredient and this recipe
+                new_ing = Ingredient.create(name: ingredient['name'])
+                RecipeIngredient.create(recipe: recipe, ingredient: new_ing, quantity_number: ingredient['measures']['us']['amount'].to_f, measurement: ingredient['measures']['us']['unitLong'], instruction: ingredient['originalString'])
+            end
+        end
+
+        #possible tags that the api response gives
+        tags_arr = (api_response['cuisines'] + api_response['dishTypes']).uniq
+        tags_arr.each do |t|
+            tag = Tag.find_by(name: t)
+            if tag #if tag is already exist, relate recipe and tag
+                RecipeTag.create(recipe: recipe, tag: tag)
+            else
+                new_tag = Tag.create(name: t)
+                RecipeTag.create(recipe: recipe, tag: new_tag)
+            end
+        end
+    end
+
+end
