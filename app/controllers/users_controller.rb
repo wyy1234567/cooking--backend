@@ -45,7 +45,10 @@ class UsersController < ApplicationController
     end
 
     def logout
-        set_user(nil)
+        # set_user(nil)
+        #
+        # hmm, is there a way to invalidate the token?
+        #
     end
 
     private
