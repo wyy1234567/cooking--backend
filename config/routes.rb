@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :ingredients
   resources :likes
   resources :comments
-  # resources :users
+  resources :users
   # resources :recipes
   
   get "/recipes", to: "recipes#show_user_recipes"

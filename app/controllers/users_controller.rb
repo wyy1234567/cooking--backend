@@ -5,6 +5,10 @@ class UsersController < ApplicationController
 
     skip_before_action :authorized
 
+    def index
+        render json: User.all 
+    end
+
     def register 
         # user = User.create(user_params)
         # set_user(user)
