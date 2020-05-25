@@ -41,7 +41,8 @@ class Recipe < ApplicationRecord
         recipe.merge!({:user => self.user})
         # recipe.merge!({:ingredients => self.ingredients})
         recipe.merge!({:likes => self.likes})
-        recipe.merge!({:comments => self.comments})
+        # recipe.merge!({:comments => self.comments})
+        recipe.merge!({:comments => self.comment_info})
         recipe.merge!({:tags => self.tags})
         recipe.merge!({:ingredients => self.measurements})
     end
@@ -51,6 +52,13 @@ class Recipe < ApplicationRecord
             {ingredient: ri.ingredient, quantity_number: ri.quantity_number, measurement: ri.measurement, instruction: ri.instruction}
         end
     end
+
+    def comment_info 
+        self.comments.map do |comment|
+            {user: User.find(comment.user_id), comment: comment}
+        end
+    end
+
 
 
     def self.search_recipes(query)

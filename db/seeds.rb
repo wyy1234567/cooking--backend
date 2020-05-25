@@ -35,10 +35,10 @@ Follow.destroy_all
 #     curr_recipe_json = JSON.parse(curr_recipe)
 # end
 
-user1 =  User.create(name: 'wyy', password_digest: '123')
-user2 = User.create(name: 'Gordon Ramsay', password_digest: '123')
-user3 = User.create(name: 'Thomas Keller', password_digest: '123')
-user4 = User.create(name: 'lucky', password_digest: '123')
+user1 =  User.create(name: 'wyy', password: '123')
+user2 = User.create(name: 'Gordon Ramsay', password: '123')
+user3 = User.create(name: 'Thomas Keller', password: '123')
+user4 = User.create(name: 'lucky', password: '123')
 
 follow1 = Follow.create(user_id: user1.id, following_id: user2.id)
 follow2 = Follow.create(user_id: user1.id, following_id: user3.id)
@@ -88,7 +88,7 @@ recipe1_tag3 = RecipeTag.create(recipe: recipe1, tag: tag3)
 recipe1_tag4 = RecipeTag.create(recipe: recipe1, tag: tag4)
 
 like1 = Like.create(user: user1, recipe: recipe1)
-comment1 = Comment.create(user: user1, recipe: recipe1, text: "It's my first time eating a Hawaiian burger, and it's yummy!")
+comment1 = Comment.create(user: user4, recipe: recipe1, text: "It's my first time eating a Hawaiian burger, and it's yummy!")
 
 recipe2 = Recipe.create(title: "Falafel Burgers with Feta Cucumber Sauce", 
     image: "https://spoonacular.com/recipeImages/492564-556x370.jpg", 
@@ -134,4 +134,4 @@ recipe2_tag1 = RecipeTag.create(recipe: recipe2, tag: tag5)
 recipe2_tag2 = RecipeTag.create(recipe: recipe2, tag: tag4)
 
 like2 = Like.create(user: user1, recipe: recipe2)
-comment1 = Comment.create(user: user1, recipe: recipe2, text: "It's the best Falafel Burgers ever!")
+comment1 = Comment.create(user: user2, recipe: recipe2, text: "It's the best Falafel Burgers ever!")
