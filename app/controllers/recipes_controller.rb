@@ -38,6 +38,8 @@ class RecipesController < ApplicationController
     #show details about this recipe, along with its ingredients, likes, comments, tags
     def show
         recipe = Recipe.find(params[:id])
+        if params[:id].include?('A')
+        end
         puts "We have a recipe match"
         details = recipe.full_recipe_info(params[:id].to_i)
         puts details
@@ -46,7 +48,8 @@ class RecipesController < ApplicationController
     
     #given a recipe title, seach for recipes that match the query 
     def search 
-        recipes = Recipe.search_recipes(params[:query])
+        # recipes = Recipe.search_recipes(params[:query])
+        recipes = Recipe.api_search(params[:query])
         render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
