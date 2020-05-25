@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get "/recipes/:id", to: "recipes#show"
   post "/recipes", to: "recipes#create"
   patch "/recipes/:id", to: "recipes#update"
+  delete "/recipes/:id", to: "recipes#destroy"
 
   post '/users/login', to: "users#login"
   post '/users/register', to: "users#register"

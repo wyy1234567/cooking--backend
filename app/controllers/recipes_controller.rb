@@ -20,19 +20,19 @@ class RecipesController < ApplicationController
             puts "No current user"
             # recipes = Recipe.all
         end
-        render json: recipes, except: [:created_at, :updated_at]
+        render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
     #render recipes that are posted by user's followings, given user_id, route: /:user_id/following_recipes 
     def following_recipes
         recipes = Recipe.find_following_recipes(params[:user_name])
-        render json: recipes, except: [:created_at, :updated_at]
+        render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
     #recipe list of given tag name, given tag_id, route: /tag/:tag_id/recipes
     def tag_recipes 
         recipes = Recipe.tag_recipes(params[:tag_name])
-        render json: recipes, except: [:created_at, :updated_at]
+        render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
     #show details about this recipe, along with its ingredients, likes, comments, tags
@@ -47,7 +47,7 @@ class RecipesController < ApplicationController
     #given a recipe title, seach for recipes that match the query 
     def search 
         recipes = Recipe.search_recipes(params[:query])
-        render json: recipes, except: [:created_at, :updated_at]
+        render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
     def create

@@ -38,6 +38,7 @@ class Recipe < ApplicationRecord
     def full_recipe_info(recipe_id)
         recipe={}
         recipe = {:recipe => self}
+        recipe.merge!({:user => self.user})
         # recipe.merge!({:ingredients => self.ingredients})
         recipe.merge!({:likes => self.likes})
         recipe.merge!({:comments => self.comments})
