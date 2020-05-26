@@ -48,7 +48,7 @@ class Recipe < ApplicationRecord
 
     def measurements
         self.recipe_ingredients.map do |ri|
-            {ingredient: ri.ingredient, quantity_number: ri.quantity_number, measurement: ri.measurement, instruction: ri.instruction}
+            {id: ri.ingredient.id, name: ri.ingredient.name, quantity_number: ri.quantity_number, measurement: ri.measurement, instruction: ri.instruction}
         end
     end
 
@@ -94,6 +94,30 @@ class Recipe < ApplicationRecord
                 new_tag = Tag.create(name: t)
                 RecipeTag.create(recipe: recipe, tag: new_tag)
             end
+        end
+    end
+
+    def set_tags(tags)
+        self.tags = []
+        tags.each do |tag_param|
+            tag = Tag.find_or_create_by(name: tag_param[:name])
+            puts tag
+            self.tags << tag
+        end
+    end
+
+    def set_ingredients(ingredients)
+        self.ingredients = []
+        ingredients.each do |ing_param|
+            puts "INGREDIENT PARAM"
+            puts ing_param
+            ing = Ingredient.find_or_create_by(name: ing_param[:name])
+            ri = RecipeIngredient.new(recipe: self, ingredient: ing)
+            # set the other metadata
+            ri.quantity_number = ing_param[:quantity_number]
+            ri.measurement = ing_param[:measurement]
+            ri.instruction = ing_param[:instruction]
+            ri.save
         end
     end
 

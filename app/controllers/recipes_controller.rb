@@ -54,8 +54,21 @@ class RecipesController < ApplicationController
         puts "CREATE RECIPE"
         puts recipe_params
 
+        puts "FULL RECIPE PARAMS"
+        puts params
+
         recipe = Recipe.new(recipe_params)
         recipe.user = current_user
+
+        if params[:recipe][:tags] then
+            recipe.set_tags(params[:recipe][:tags])
+        end
+
+        puts params[:recipe][:ingredients]
+
+        if params[:recipe][:ingredients] then
+            recipe.set_ingredients(params[:recipe][:ingredients])
+        end
 
         if recipe.save then
             puts "valid recipe"
@@ -72,6 +85,23 @@ class RecipesController < ApplicationController
         puts recipe_params
 
         recipe.update(recipe_params)
+
+        puts "FULL RECIPE PARAMS"
+        puts params
+
+        puts params[:recipe][:tags]
+
+        if params[:recipe][:tags] then
+            recipe.set_tags(params[:recipe][:tags])
+            recipe.save
+        end
+
+        puts params[:recipe][:ingredients]
+
+        if params[:recipe][:ingredients] then
+            recipe.set_ingredients(params[:recipe][:ingredients])
+            recipe.save
+        end
 
         if recipe.valid? then
             puts "valid recipe"
