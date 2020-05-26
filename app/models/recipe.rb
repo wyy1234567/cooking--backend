@@ -1,3 +1,8 @@
+require "json"
+require "net/http"
+require "open-uri"
+require 'rest-client'
+
 class Recipe < ApplicationRecord
     has_many :likes
     has_many :comments
@@ -41,7 +46,8 @@ class Recipe < ApplicationRecord
         recipe.merge!({:user => self.user})
         # recipe.merge!({:ingredients => self.ingredients})
         recipe.merge!({:likes => self.likes})
-        recipe.merge!({:comments => self.comments})
+        # recipe.merge!({:comments => self.comments})
+        recipe.merge!({:comments => self.comment_info})
         recipe.merge!({:tags => self.tags})
         recipe.merge!({:ingredients => self.measurements})
     end
@@ -52,6 +58,13 @@ class Recipe < ApplicationRecord
         end
     end
 
+    def comment_info 
+        self.comments.map do |comment|
+            {user: User.find(comment.user_id), comment: comment}
+        end
+    end
+
+
 
     def self.search_recipes(query)
         Recipe.all.select do |recipe|
@@ -59,13 +72,36 @@ class Recipe < ApplicationRecord
         end
     end
 
+    def self.api_search(query)
+        api_key = ENV['API_KEY']
+        recipes_url = "https://api.spoonacular.com/recipes/search?apiKey=#{api_key}&query=#{query}"
+        resp = RestClient.get(recipes_url)
+        resp_json = JSON.parse(resp)
+        # puts('API search:')
+        # puts(resp_json)
+        resp_json['results'].map do |recipe_obj|
+            Recipe.convert(recipe_obj)
+        end
+    end
+
     #create a Recipe object based on a given API search result
     #result is an array of objects, iterate over it, and create recipe for each element
-    def self.convert(recipe_obj, user_id)
+    def self.convert(recipe_obj)
         recipe_title = recipe_obj['title']
-        image_url = `https://spoonacular.com/recipeImages/#{recipe_title.parameterize}-#{recipe_obj['id']}.jpg`
-        Recipe.create(title: recipe_title, image: image_url, user_id: user_id, isPublic: true, api_id: recipe_obj['id'])
+        image_url = "https://spoonacular.com/recipeImages/#{recipe_title.parameterize}-#{recipe_obj['id']}.jpg"
+        Recipe.new(title: recipe_title, user_id: nil, image: image_url, isPublic: true, api_id: recipe_obj['id'])
     end
+
+    def self.get_recipe_from_api(recipe_api_id)
+        api_key = ENV['API_KEY']
+        curr_recipe_url = "https://api.spoonacular.com/recipes/#{recipe_api_id}/information?apiKey=#{api_key}"
+        curr_recipe = RestClient.get(curr_recipe_url)
+        curr_recipe_json = JSON.parse(curr_recipe)
+    end
+
+
+
+    
 
     #add steps, descriptions to recipe, also create recipe_ingredient and recipe_tag
     def self.relation_recipe(recipe_id, api_response)
