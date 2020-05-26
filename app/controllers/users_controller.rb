@@ -55,6 +55,9 @@ class UsersController < ApplicationController
         #
     end
 
+    def following
+    end
+
     private
     def user_params
         puts params

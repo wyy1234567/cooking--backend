@@ -37,11 +37,24 @@ class RecipesController < ApplicationController
     
     #show details about this recipe, along with its ingredients, likes, comments, tags
     def show
-        recipe = Recipe.find(params[:id])
+        # recipe = Recipe.find(params[:id])
         if params[:id].include?('A')
+            recipe_api_id = params[:id]
+            recipe_api_id[0] = ''
+            api_recipe = Recipe.find_by(api_id: recipe_api_id)
+            if api_recipe
+                details = api_recipe.full_recipe_info(api_recipe.id)
+            else  
+                recipe = Recipe.get_recipe_from_api(recipe_api_id)
+                details = recipe.full_recipe_info(recipe.id)
+            end
+        else  
+            recipe = Recipe.find(params[:id])
+            details = recipe.full_recipe_info(params[:id].to_i)
         end
-        puts "We have a recipe match"
-        details = recipe.full_recipe_info(params[:id].to_i)
+
+        # puts "We have a recipe match"
+        # details = recipe.full_recipe_info(params[:id].to_i)
         puts details
         render json: details, except: [:created_at, :updated_at]
     end

@@ -39,6 +39,7 @@ user1 =  User.create(name: 'wyy', password: '123')
 user2 = User.create(name: 'Gordon Ramsay', password: '123')
 user3 = User.create(name: 'Thomas Keller', password: '123')
 user4 = User.create(name: 'lucky', password: '123')
+spoonacular = User.create(name: 'Spoonacular', password: '123')
 
 follow1 = Follow.create(user_id: user1.id, following_id: user2.id)
 follow2 = Follow.create(user_id: user1.id, following_id: user3.id)

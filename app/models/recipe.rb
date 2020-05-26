@@ -92,22 +92,34 @@ class Recipe < ApplicationRecord
         Recipe.new(title: recipe_title, user_id: nil, image: image_url, isPublic: true, api_id: recipe_obj['id'])
     end
 
+    #when user click 'details', grab result from api call, and assign user Spoonacular to this recipe
     def self.get_recipe_from_api(recipe_api_id)
+        api_user = User.find_by(name: 'Spoonacular')
         api_key = ENV['API_KEY']
         curr_recipe_url = "https://api.spoonacular.com/recipes/#{recipe_api_id}/information?apiKey=#{api_key}"
         curr_recipe = RestClient.get(curr_recipe_url)
         curr_recipe_json = JSON.parse(curr_recipe)
+
+        recipe_title = curr_recipe_json['title']
+        image_url = "https://spoonacular.com/recipeImages/#{recipe_title.parameterize}-#{recipe_api_id}.jpg"
+
+        new_recipe = Recipe.create(title: recipe_title, 
+            image: image_url, 
+            description: curr_recipe_json['summary'],
+            steps: curr_recipe_json['instructions'],
+            user: api_user,
+            isPublic: true,
+            api_id: recipe_api_id
+        )
+        Recipe.relation_recipe(recipe_title, curr_recipe_json)
+        return new_recipe
     end
 
 
-
-    
-
     #add steps, descriptions to recipe, also create recipe_ingredient and recipe_tag
-    def self.relation_recipe(recipe_id, api_response)
-        recipe = Recipe.find(recipe_id)
-        recipe.steps = api_response['instructions']
-        recipe.description = api_response['summary']
+    def self.relation_recipe(title, api_response)
+        recipe = Recipe.find_by(title: title)
+
         ingredients_arr = api_response['extendedIngredients']
 
         ingredients_arr.each do |ingredient|

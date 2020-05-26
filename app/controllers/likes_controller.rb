@@ -12,6 +12,7 @@ class LikesController < ApplicationController
         like.destroy
     end
 
+
     private
     def like_params
         params.require(:like).permit(:user_id, :recipe_id)
