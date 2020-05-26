@@ -76,15 +76,20 @@ class RecipesController < ApplicationController
         recipe = Recipe.new(recipe_params)
         recipe.user = current_user
 
-        if params[:recipe][:tags] then
-            recipe.set_tags(params[:recipe][:tags])
+        if params[:tags] then
+            recipe.set_tags(params[:tags])
         end
 
-        puts params[:recipe][:ingredients]
+        puts params[:ingredients]
 
-        if params[:recipe][:ingredients] then
-            recipe.set_ingredients(params[:recipe][:ingredients])
+        if params[:ingredients] then
+            recipe.set_ingredients(params[:ingredients])
         end
+
+        recipe.updateImage(params)
+
+        puts "RECIPE AFTER IMAGE"
+        puts recipe
 
         if recipe.save then
             puts "valid recipe"
@@ -105,19 +110,23 @@ class RecipesController < ApplicationController
         puts "FULL RECIPE PARAMS"
         puts params
 
-        puts params[:recipe][:tags]
+        puts params[:tags]
 
-        if params[:recipe][:tags] then
-            recipe.set_tags(params[:recipe][:tags])
-            recipe.save
+        if params[:tags] then
+            recipe.set_tags(params[:tags])
+            # recipe.save
         end
 
-        puts params[:recipe][:ingredients]
+        puts params[:ingredients]
 
-        if params[:recipe][:ingredients] then
-            recipe.set_ingredients(params[:recipe][:ingredients])
-            recipe.save
+        if params[:ingredients] then
+            recipe.set_ingredients(params[:ingredients])
+            # recipe.save
         end
+
+        recipe.updateImage(params)
+
+        recipe.save
 
         if recipe.valid? then
             puts "valid recipe"
@@ -136,6 +145,7 @@ class RecipesController < ApplicationController
 
     private 
     def recipe_params
-        params.require(:recipe).permit(:title, :image, :description, :steps, :isPublic)
+        # params.require(:recipe).permit(:title, :image, :description, :steps, :isPublic)
+        params.permit(:title, :image, :description, :steps, :isPublic)
     end
 end

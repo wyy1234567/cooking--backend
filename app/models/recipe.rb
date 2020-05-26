@@ -4,6 +4,7 @@ require "open-uri"
 require 'rest-client'
 
 class Recipe < ApplicationRecord
+    include Rails.application.routes.url_helpers
     has_many :likes
     has_many :comments
     has_many :recipe_tags
@@ -11,6 +12,8 @@ class Recipe < ApplicationRecord
     has_many :tags, through: :recipe_tags
     has_many :ingredients, through: :recipe_ingredients
     belongs_to :user
+
+    has_one_attached :imageFile
 
     def self.find_user_recipes(user_name)
         user = User.find_by(name: user_name)
@@ -42,7 +45,9 @@ class Recipe < ApplicationRecord
 
     def full_recipe_info(recipe_id)
         recipe={}
-        recipe = {:recipe => self}
+        # get whichever it is...
+        self.image = getImageUrl
+        recipe = {:recipe => self}        
         recipe.merge!({:user => self.user})
         # recipe.merge!({:ingredients => self.ingredients})
         recipe.merge!({:likes => self.likes})
@@ -169,4 +174,70 @@ class Recipe < ApplicationRecord
         end
     end
 
+    #
+    #
+    #
+    #
+    #
+    #
+    # IMAGE BASED INTERCTION
+    #
+    #
+    #
+    #
+    #
+    #
+
+    def updateImage(params)
+        if params[:changedImage] && params[:changedImage] == "true" then
+            puts "IMAGE CHANGED CHANGED CHANGED CHANGED CHANGED CHANGED"
+            puts params
+
+            # automatically purge the file if we've changed
+            delete_image if self.imageFile.attached?
+
+            if params[:imageSrc] && file?(params[:imageSrc]) then
+                self.imageFile = params[:imageSrc]
+                self.image = nil
+                # do we need to save, too?
+                # self.save
+            elsif params[:imageURL] && params[:imageURL] != "null" && params[:imageURL] != "undefined" then
+                self.image = params[:imageURL]
+                puts params[:imageURL]
+                # self.save
+            else
+                puts "no image anymore"
+                self.image = nil
+            end
+        else
+            puts "IMAGE NOT CHANGED"
+            puts "IMAGE NOT CHANGED"
+            puts "IMAGE NOT CHANGED"
+            puts params
+        end
+    end
+
+    def getImageUrl
+        if self.image then
+            return self.image
+        elsif self.imageFile.attached? then 
+            # return self.imageFile.blob.attributes
+            #         .slice('filename', 'byte_size')
+            #         .merge(url: image_url_from_file)
+            #         .tap { |attrs| attrs['name'] = attrs.delete('filename') }
+            return image_url_from_file
+        end
+    end
+
+    def image_url_from_file
+        url_for(self.imageFile)
+    end
+
+    def file?(param)
+        param.is_a?(ActionDispatch::Http::UploadedFile)
+    end
+
+    def delete_image
+        self.imageFile.purge
+    end
 end
