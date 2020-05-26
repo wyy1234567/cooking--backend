@@ -56,7 +56,11 @@ class UsersController < ApplicationController
     end
 
     def following
+        user = User.find(params[:id].to_i)
+        users = user.followings 
+        render json: users, except: [:created_at, :updated_at]
     end
+
 
     private
     def user_params

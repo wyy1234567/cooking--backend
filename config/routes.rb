@@ -21,9 +21,10 @@ Rails.application.routes.draw do
   post '/users/login', to: "users#login"
   post '/users/register', to: "users#register"
   post '/users/logout', to: "users#logout"
-  get 'users/:id/following', to: "user#following"
-  # post 'users/:id/following', to: "user#following"
-  # delete 'users/:id/following', to: "user#following"
+  get 'users/:id/following', to: "users#following"
+  get '/followings', to: 'follows#index'
+  post '/followings/new', to: "follows#add_follow"
+  delete 'followings/:id', to: "follows#destroy"  #here id is the Follow instance id
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

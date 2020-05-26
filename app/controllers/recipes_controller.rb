@@ -61,8 +61,8 @@ class RecipesController < ApplicationController
     
     #given a recipe title, seach for recipes that match the query 
     def search 
-        # recipes = Recipe.search_recipes(params[:query])
-        recipes = Recipe.api_search(params[:query])
+        recipes = Recipe.search_recipes(params[:query])
+        # recipes = Recipe.api_search(params[:query])
         render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
