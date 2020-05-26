@@ -41,9 +41,13 @@ class RecipesController < ApplicationController
         if params[:id].include?('A')
             recipe_api_id = params[:id]
             recipe_api_id[0] = ''
-            recipe = Recipe.get_recipe_from_api(recipe_api_id)
-            # recipe = Recipe.get_recipe_from_api(recipe_api_id)
-            details = recipe.full_recipe_info(recipe.id)
+            api_recipe = Recipe.find_by(api_id: recipe_api_id)
+            if api_recipe
+                details = api_recipe.full_recipe_info(api_recipe.id)
+            else  
+                recipe = Recipe.get_recipe_from_api(recipe_api_id)
+                details = recipe.full_recipe_info(recipe.id)
+            end
         else  
             recipe = Recipe.find(params[:id])
             details = recipe.full_recipe_info(params[:id].to_i)
