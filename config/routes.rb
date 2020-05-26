@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   
   get "/recipes", to: "recipes#show_user_recipes"
   get '/recipes/search/:query', to: 'recipes#search'
-  get "/recipes/following_recipes", to: "recipes#following_recipes"
+  get "/recipes/:user_name/following_recipes", to: "recipes#following_recipes"
   get '/recipes/by_tag/:tag_id', to: 'recipes#tag_recipes'
   get "/recipes/:id", to: "recipes#show"
   post "/recipes", to: "recipes#create"
