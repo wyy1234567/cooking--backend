@@ -38,8 +38,8 @@ class Recipe < ApplicationRecord
         recipes
     end
     
-    def self.tag_recipes(tag_name)
-        tag = Tag.find_by(name: tag_name)
+    def self.tag_recipes(tag_id)
+        tag = Tag.find(tag_id)
         tag.recipes
     end
 

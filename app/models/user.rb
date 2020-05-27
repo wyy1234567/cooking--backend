@@ -14,4 +14,9 @@ class User < ApplicationRecord
     has_secure_password
 
     validates :name, uniqueness: { case_sensitive: false }
+
+    def follow_default
+        spoonacular = User.find_by(name: 'Spoonacular')
+        self.following << spoonacular
+    end
 end

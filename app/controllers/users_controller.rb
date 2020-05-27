@@ -14,8 +14,10 @@ class UsersController < ApplicationController
         # set_user(user)
         # render json: user, except: [:created_at, :updated_at]
 
-        user = User.create(user_params)
-        if user.valid?
+        user = User.new(user_params)
+        # spoonacular = User.find_by(name: '')
+        user.follow_default
+        if user.save
             token = encode_token(user_id: user.id)
             render json: { id: user.id, name: user.name, jwt: token }, status: :created
         else
@@ -56,7 +58,11 @@ class UsersController < ApplicationController
     end
 
     def following
+        user = User.find(params[:id].to_i)
+        users = user.followings 
+        render json: users, except: [:created_at, :updated_at]
     end
+
 
     private
     def user_params
