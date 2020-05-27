@@ -31,7 +31,7 @@ class RecipesController < ApplicationController
     
     #recipe list of given tag name, given tag_id, route: /tag/:tag_id/recipes
     def tag_recipes 
-        recipes = Recipe.tag_recipes(params[:tag_name])
+        recipes = Recipe.tag_recipes(params[:tag_id])
         render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
