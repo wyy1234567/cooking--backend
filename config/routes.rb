@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :ingredients
   resources :likes
   resources :comments
-  resources :users
+  # resources :users
   # resources :recipes
   #resources :follows
   
@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   patch "/recipes/:id", to: "recipes#update"
   delete "/recipes/:id", to: "recipes#destroy"
 
+  post "/recipes/:id/copy", to: "recipes#copy_recipe"
+
+  get "/users/ping", to: "users#ping"
   post '/users/login', to: "users#login"
   post '/users/register', to: "users#register"
   post '/users/logout', to: "users#logout"

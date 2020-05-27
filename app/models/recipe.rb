@@ -240,4 +240,49 @@ class Recipe < ApplicationRecord
     def delete_image
         self.imageFile.purge
     end
+
+    def create_copy(current_user)
+        # need to copy the recipe as well as 
+        # change the user
+        # copy all of the references
+        # tags
+        # ingredients
+        # but not the likes
+        #
+        # how do we copy the image?
+        copy = self.dup
+        copy.user = current_user
+
+        byebug
+
+        #tags
+        self.tags.each do |tag|
+            copy.tags << tag
+        end
+
+        byebug
+
+        #ingredients
+        self.recipe_ingredients.each do |ri|
+            copy.recipe_ingredients << ri
+        end
+
+        byebug
+
+        #image?
+        if self.imageFile.attached? then
+            copy.imageFile.attach(self.imageFile.blob)
+        end
+
+        byebug
+
+        puts "COPY COPY COPY"
+        puts copy
+
+        if copy.save then
+            return copy.id
+        else
+            return nil
+        end
+    end
 end
