@@ -35,6 +35,11 @@ class RecipesController < ApplicationController
         render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
+    def liked_recipes
+        recipes = Recipe.user_liked_recipes(params[:user_id])
+        render json: recipes, except: [:created_at, :updated_at]
+    end
+    
     #show details about this recipe, along with its ingredients, likes, comments, tags
     def show
         # recipe = Recipe.find(params[:id])

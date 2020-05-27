@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   get '/recipes/by_tag/:tag_id', to: 'recipes#tag_recipes'
 
+  get '/recipes/liked/:user_id', to: 'recipes#liked_recipes' #get user's liked recipes
+
   get "/recipes/:id", to: "recipes#show"
   post "/recipes", to: "recipes#create"
   patch "/recipes/:id", to: "recipes#update"

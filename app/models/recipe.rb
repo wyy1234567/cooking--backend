@@ -22,6 +22,22 @@ class Recipe < ApplicationRecord
         end
     end
 
+    def self.user_liked_recipes(user_id)
+        user = User.find(user_id)
+        likes_arr = user.likes
+        liked_recipes = []
+        like_obj = {}
+        user.likes.each do |like_instance|
+            recipe = Recipe.find(like_instance.recipe_id)
+            like_obj = {:recipe => recipe}
+            user = User.find(recipe.user_id)
+            like_obj.merge!({:user => user})
+            like_obj.merge!({:likes => recipe.likes})
+            liked_recipes.push(like_obj)
+        end
+        liked_recipes
+    end
+
     def self.find_following_recipes(user_name)
         user = User.find_by(name: user_name)
         following_ids = user.followings.map do |following|
@@ -262,28 +278,26 @@ class Recipe < ApplicationRecord
         copy = self.dup
         copy.user = current_user
 
-        byebug
-
         #tags
         self.tags.each do |tag|
             copy.tags << tag
         end
 
-        byebug
+
 
         #ingredients
         self.recipe_ingredients.each do |ri|
             copy.recipe_ingredients << ri
         end
 
-        byebug
+            
 
         #image?
         if self.imageFile.attached? then
             copy.imageFile.attach(self.imageFile.blob)
         end
 
-        byebug
+
 
         puts "COPY COPY COPY"
         puts copy
