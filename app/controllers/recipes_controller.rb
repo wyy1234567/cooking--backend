@@ -61,8 +61,16 @@ class RecipesController < ApplicationController
     
     #given a recipe title, seach for recipes that match the query 
     def search 
-        # recipes = Recipe.search_recipes(params[:query])
-        recipes = Recipe.api_search(params[:query])
+        recipes = Recipe.search_recipes(params[:query])
+        api_recipes = Recipe.api_search(params[:query])
+
+        # get all the unique ones before adding them so we don't compound the time it takes
+        non_overlap = api_recipes.filter do |ar|
+            recipes.none? {|r| r.api_id == ar.api_id}
+        end
+
+        recipes += non_overlap
+
         render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
@@ -142,6 +150,23 @@ class RecipesController < ApplicationController
         recipe.destroy
     end
 
+    def copy_recipe
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        puts "COPY"
+        recipe = Recipe.find(params[:id])
+        id = recipe.create_copy(current_user)
+        render json: {id: id}
+    end
 
     private 
     def recipe_params

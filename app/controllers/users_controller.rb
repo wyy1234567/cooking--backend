@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     # register
     # login
 
-    skip_before_action :authorized
+    skip_before_action :authorized, except: :ping
 
     def index
         render json: User.all 
@@ -53,6 +53,21 @@ class UsersController < ApplicationController
         #
         # hmm, is there a way to invalidate the token?
         #
+    end
+
+    def ping
+        # do nothing, just trigger the authorized function
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        puts "PING"
+        render json: {success: true}
     end
 
     def following

@@ -29,9 +29,10 @@ class ApplicationController < ActionController::API
     end
     
     def auth_header
-        # puts "headers?"
-        # puts request.headers
-        # puts request.headers['Authorization']
+        puts "headers?"
+        puts request.headers
+        puts request.headers['Authorization']
+        puts "AFTER HEADER"
         # { 'Authorization': 'Bearer <token>' }
         request.headers['Authorization']
     end
@@ -39,10 +40,10 @@ class ApplicationController < ActionController::API
     def decoded_token
         puts "decode token"
         if auth_header
-            # puts "we have an auth header"
+            puts "we have an auth header"
             # puts auth_header
             token = auth_header.split(' ')[1]
-            # puts token
+            puts token
             # headers: { 'Authorization': 'Bearer <token>' }
             begin
                 JWT.decode(token, secret, true, algorithm: 'HS256')
@@ -59,7 +60,15 @@ class ApplicationController < ActionController::API
             # decoded_token=> [{"user_id"=>2}, {"alg"=>"HS256"}]
             # or nil if we can't decode the token
             user_id = decoded[0]['user_id']
-            @user = User.find_by(id: user_id)
+            user = User.find_by(id: user_id)
+            puts "DECODED"
+            puts "DECODED"
+            puts "DECODED"
+            puts "DECODED"
+            puts "DECODED"
+            puts "DECODED"
+            puts user
+            user
         end
     end
 
