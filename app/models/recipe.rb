@@ -84,17 +84,20 @@ class Recipe < ApplicationRecord
         resp_json = JSON.parse(resp)
         # puts('API search:')
         # puts(resp_json)
+
+        api_user = User.find_by(name: 'Spoonacular')
+
         resp_json['results'].map do |recipe_obj|
-            Recipe.convert(recipe_obj)
+            Recipe.convert(recipe_obj, api_user)
         end
     end
 
     #create a Recipe object based on a given API search result
     #result is an array of objects, iterate over it, and create recipe for each element
-    def self.convert(recipe_obj)
+    def self.convert(recipe_obj, api_user)
         recipe_title = recipe_obj['title']
         image_url = "https://spoonacular.com/recipeImages/#{recipe_title.parameterize}-#{recipe_obj['id']}.jpg"
-        Recipe.new(title: recipe_title, user_id: nil, image: image_url, isPublic: true, api_id: recipe_obj['id'])
+        Recipe.new(title: recipe_title, user: api_user, image: image_url, isPublic: true, api_id: recipe_obj['id'])
     end
 
     #when user click 'details', grab result from api call, and assign user Spoonacular to this recipe
@@ -139,6 +142,12 @@ class Recipe < ApplicationRecord
 
         #possible tags that the api response gives
         tags_arr = (api_response['cuisines'] + api_response['dishTypes']).uniq
+        puts "API CUISINE AND DISH TYPE"
+        puts "API CUISINE AND DISH TYPE"
+        puts "API CUISINE AND DISH TYPE"
+        puts "API CUISINE AND DISH TYPE"
+        puts "API CUISINE AND DISH TYPE"
+        puts tags_arr
         tags_arr.each do |t|
             tag = Tag.find_by(name: t)
             if tag #if tag is already exist, relate recipe and tag

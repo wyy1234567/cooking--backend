@@ -29,18 +29,18 @@ class ApplicationController < ActionController::API
     end
     
     def auth_header
-        puts "headers?"
-        puts request.headers
-        puts request.headers['Authorization']
-        puts "AFTER HEADER"
+        # puts "headers?"
+        # puts request.headers
+        # puts request.headers['Authorization']
+        # puts "AFTER HEADER"
         # { 'Authorization': 'Bearer <token>' }
         request.headers['Authorization']
     end
     
     def decoded_token
-        puts "decode token"
+        # puts "decode token"
         if auth_header
-            puts "we have an auth header"
+            # puts "we have an auth header"
             # puts auth_header
             token = auth_header.split(' ')[1]
             puts token
@@ -61,13 +61,6 @@ class ApplicationController < ActionController::API
             # or nil if we can't decode the token
             user_id = decoded[0]['user_id']
             user = User.find_by(id: user_id)
-            puts "DECODED"
-            puts "DECODED"
-            puts "DECODED"
-            puts "DECODED"
-            puts "DECODED"
-            puts "DECODED"
-            puts user
             user
         end
     end

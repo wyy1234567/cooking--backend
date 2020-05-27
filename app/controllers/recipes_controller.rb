@@ -61,7 +61,10 @@ class RecipesController < ApplicationController
     
     #given a recipe title, seach for recipes that match the query 
     def search 
-        recipes = Recipe.search_recipes(params[:query])
+        recipes = []
+
+        recipes += Recipe.search_recipes(params[:query])
+
         api_recipes = Recipe.api_search(params[:query])
 
         # get all the unique ones before adding them so we don't compound the time it takes
@@ -71,13 +74,29 @@ class RecipesController < ApplicationController
 
         recipes += non_overlap
 
+        puts "RECIPE SEARCH"
+        puts recipes
+
         render json: recipes, :include => :user, except: [:created_at, :updated_at]
     end
     
     def create
         puts "CREATE RECIPE"
+        puts "CREATE RECIPE"
+        puts "CREATE RECIPE"
+        puts "CREATE RECIPE"
+        puts "CREATE RECIPE"
+        puts "CREATE RECIPE"
+        puts "CREATE RECIPE"
         puts recipe_params
 
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
         puts "FULL RECIPE PARAMS"
         puts params
 
@@ -111,10 +130,24 @@ class RecipesController < ApplicationController
         recipe = Recipe.find(params[:id])
 
         puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
+        puts "UPDATE RECIPE"
         puts recipe_params
 
         recipe.update(recipe_params)
 
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
+        puts "FULL RECIPE PARAMS"
         puts "FULL RECIPE PARAMS"
         puts params
 

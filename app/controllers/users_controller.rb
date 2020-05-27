@@ -14,7 +14,7 @@ class UsersController < ApplicationController
         # set_user(user)
         # render json: user, except: [:created_at, :updated_at]
 
-        user = User.new(user_params)
+        user = User.create(user_params)
         # spoonacular = User.find_by(name: '')
         user.follow_default
         if user.save
