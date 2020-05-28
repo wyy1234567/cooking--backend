@@ -174,8 +174,6 @@ class RecipesController < ApplicationController
 
         recipe.save
 
-        byebug
-
         if recipe.valid? then
             puts "valid recipe"
         else
