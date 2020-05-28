@@ -162,7 +162,12 @@ class Recipe < ApplicationRecord
     def set_tags(tags)
         self.tags = []
         tags.each do |tag_param|
-            tag = Tag.find_or_create_by(name: tag_param[:name])
+            puts "TAG PARAM"
+            puts "TAG PARAM"
+            puts "TAG PARAM"
+            puts tag_param
+            puts tag_param["name"]
+            tag = Tag.find_or_create_by(name: tag_param["name"])
             puts tag
             self.tags << tag
         end
@@ -172,13 +177,16 @@ class Recipe < ApplicationRecord
         self.ingredients = []
         ingredients.each do |ing_param|
             puts "INGREDIENT PARAM"
+            puts "INGREDIENT PARAM"
+            puts "INGREDIENT PARAM"
             puts ing_param
-            ing = Ingredient.find_or_create_by(name: ing_param[:name])
+            puts ing_param["name"]
+            ing = Ingredient.find_or_create_by(name: ing_param["name"])
             ri = RecipeIngredient.new(recipe: self, ingredient: ing)
             # set the other metadata
-            ri.quantity_number = ing_param[:quantity_number]
-            ri.measurement = ing_param[:measurement]
-            ri.instruction = ing_param[:instruction]
+            ri.quantity_number = ing_param["quantity_number"]
+            ri.measurement = ing_param["measurement"]
+            ri.instruction = ing_param["instruction"]
             ri.save
         end
     end

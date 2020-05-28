@@ -1,3 +1,6 @@
+
+require 'json';
+
 class RecipesController < ApplicationController
     # index (based on given user_id)
     # show
@@ -104,13 +107,15 @@ class RecipesController < ApplicationController
         recipe.user = current_user
 
         if params[:tags] then
-            recipe.set_tags(params[:tags])
+            tags = JSON.parse(params[:tags])
+            recipe.set_tags(tags)
         end
 
         puts params[:ingredients]
 
         if params[:ingredients] then
-            recipe.set_ingredients(params[:ingredients])
+            ingredients = JSON.parse(params[:ingredients])
+            recipe.set_ingredients(ingredients)
         end
 
         recipe.updateImage(params)
@@ -154,20 +159,22 @@ class RecipesController < ApplicationController
         puts params[:tags]
 
         if params[:tags] then
-            recipe.set_tags(params[:tags])
-            # recipe.save
+            tags = JSON.parse(params[:tags])
+            recipe.set_tags(tags)
         end
 
         puts params[:ingredients]
 
         if params[:ingredients] then
-            recipe.set_ingredients(params[:ingredients])
-            # recipe.save
+            ingredients = JSON.parse(params[:ingredients])
+            recipe.set_ingredients(ingredients)
         end
 
         recipe.updateImage(params)
 
         recipe.save
+
+        byebug
 
         if recipe.valid? then
             puts "valid recipe"
