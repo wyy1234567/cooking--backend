@@ -18,7 +18,10 @@ class RecipesController < ApplicationController
         recipes = []
         if current_user then
             puts "we have a user"
-            recipes = current_user.recipes
+            recipes = current_user.recipes.map do |recipe|
+                recipe.image = recipe.getImageUrl
+                recipe
+            end
         else
             puts "No current user"
             # recipes = Recipe.all

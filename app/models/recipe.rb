@@ -29,6 +29,7 @@ class Recipe < ApplicationRecord
         like_obj = {}
         user.likes.each do |like_instance|
             recipe = Recipe.find(like_instance.recipe_id)
+            recipe.image = recipe.getImageUrl
             like_obj = {:recipe => recipe}
             user = User.find(recipe.user_id)
             like_obj.merge!({:user => user})
@@ -47,6 +48,7 @@ class Recipe < ApplicationRecord
         following_ids.each do |id|
             Recipe.all.each do |recipe|
                 if recipe.user_id == id 
+                    recipe.image = recipe.getImageUrl
                     recipes << recipe
                 end
             end
@@ -56,7 +58,10 @@ class Recipe < ApplicationRecord
     
     def self.tag_recipes(tag_id)
         tag = Tag.find(tag_id)
-        tag.recipes
+        tag.recipes.map do |recipe|
+            recipe.image = recipe.getImageUrl
+            recipe
+        end
     end
 
     def full_recipe_info(recipe_id)
@@ -85,10 +90,9 @@ class Recipe < ApplicationRecord
         end
     end
 
-
-
     def self.search_recipes(query)
         Recipe.all.select do |recipe|
+            recipe.image = recipe.getImageUrl
             recipe.title.downcase.include?(query.downcase)
         end
     end
